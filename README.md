@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PC Security Management System
 
 A web-based security management system for Windows that allows you to monitor and control various security aspects of your PC in real-time.
@@ -86,3 +87,6 @@ If you encounter any issues:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details. 
+=======
+# Rajwadi-security
+>>>>>>> 0b5c42f80bc051efc34ee2920c5399756ff4a841
