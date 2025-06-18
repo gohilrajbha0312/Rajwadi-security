@@ -1,0 +1,9 @@
+Flask>=2.2.5
+psutil==5.8.0
+Flask-SQLAlchemy==3.0.5
+Flask-Login==0.6.2
+python-dotenv==0.19.0
+Werkzeug==2.3.7
+pywin32==310
+wmi==1.5.1
+requests==2.31.0 

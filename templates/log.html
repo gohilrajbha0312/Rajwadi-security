@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajwadi Security - Logs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ff9d;
+            --secondary-color: #00b8ff;
+            --dark-bg: #1a1a1a;
+            --darker-bg: #141414;
+            --card-bg: #242424;
+            --text-color: #ffffff;
+            --text-muted: #888888;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background-color: var(--darker-bg);
+            min-height: 100vh;
+            padding: 20px;
+            border-right: 1px solid #333;
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-color);
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(0, 255, 157, 0.1);
+            color: var(--primary-color);
+        }
+
+        .sidebar .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid #333;
+            padding: 15px 20px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--darker-bg);
+        }
+
+        .btn-primary:hover {
+            background-color: #00cc7d;
+            border-color: #00cc7d;
+        }
+
+        .btn-outline {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--darker-bg);
+        }
+
+        .log-entry {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            transition: background-color 0.3s ease;
+        }
+
+        .log-entry:hover {
+            background-color: rgba(0, 255, 157, 0.05);
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .log-level {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .log-level.info {
+            background-color: rgba(0, 184, 255, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .log-level.warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .log-level.error {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
+        .log-level.success {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .log-source {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        .log-message {
+            margin-top: 5px;
+            word-break: break-word;
+        }
+
+        .filter-section {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-control, .form-select {
+            background-color: var(--darker-bg);
+            border: 1px solid #333;
+            color: var(--text-color);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--darker-bg);
+            border-color: var(--primary-color);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 255, 157, 0.25);
+        }
+
+        .pagination .page-link {
+            background-color: var(--card-bg);
+            border-color: #333;
+            color: var(--text-color);
+        }
+
+        .pagination .page-link:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--darker-bg);
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--darker-bg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <h4 class="mb-4">Rajwadi Security</h4>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="/eep">
+                        <i class="fas fa-shield-alt"></i> EEP
+                    </a>
+                    <a class="nav-link active" href="/log">
+                        <i class="fas fa-list"></i> Log
+                    </a>
+                    <a class="nav-link" href="/playbook">
+                        <i class="fas fa-book"></i> Playbook
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Security Logs</h2>
+                    <div>
+                        <button class="btn btn-outline me-2" onclick="refreshLogs()">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh
+                        </button>
+                        <button class="btn btn-outline" onclick="exportLogs()">
+                            <i class="fas fa-download me-2"></i>Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filter-section mb-4">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Log Level</label>
+                            <select class="form-select" id="logLevel">
+                                <option value="all">All Levels</option>
+                                <option value="info">Info</option>
+                                <option value="warning">Warning</option>
+                                <option value="error">Error</option>
+                                <option value="success">Success</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Source</label>
+                            <select class="form-select" id="logSource">
+                                <option value="all">All Sources</option>
+                                <option value="system">System</option>
+                                <option value="security">Security</option>
+                                <option value="network">Network</option>
+                                <option value="application">Application</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Time Range</label>
+                            <select class="form-select" id="timeRange">
+                                <option value="1h">Last Hour</option>
+                                <option value="6h">Last 6 Hours</option>
+                                <option value="24h">Last 24 Hours</option>
+                                <option value="7d">Last 7 Days</option>
+                                <option value="30d">Last 30 Days</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Log Entries -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div id="logEntries">
+                            <!-- Log entries will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Log pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to format timestamp
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString();
+        }
+
+        // Function to create log entry HTML
+        function createLogEntry(log) {
+            return `
+                <div class="log-entry">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="log-level ${log.level.toLowerCase()}">${log.level}</span>
+                            <span class="log-source ms-2">${log.source}</span>
+                        </div>
+                        <span class="log-time">${formatTimestamp(log.timestamp)}</span>
+                    </div>
+                    <div class="log-message">${log.message}</div>
+                </div>
+            `;
+        }
+
+        // Function to load logs
+        function loadLogs() {
+            const level = document.getElementById('logLevel').value;
+            const source = document.getElementById('logSource').value;
+            const timeRange = document.getElementById('timeRange').value;
+
+            fetch(`/api/logs?level=${level}&source=${source}&timeRange=${timeRange}`)
+                .then(response => response.json())
+                .then(data => {
+                    const logEntries = document.getElementById('logEntries');
+                    logEntries.innerHTML = data.logs.map(log => createLogEntry(log)).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading logs:', error);
+                    alert('Failed to load logs. Please try again.');
+                });
+        }
+
+        // Function to refresh logs
+        function refreshLogs() {
+            loadLogs();
+        }
+
+        // Function to apply filters
+        function applyFilters() {
+            loadLogs();
+        }
+
+        // Function to export logs
+        function exportLogs() {
+            const level = document.getElementById('logLevel').value;
+            const source = document.getElementById('logSource').value;
+            const timeRange = document.getElementById('timeRange').value;
+
+            fetch(`/api/logs/export?level=${level}&source=${source}&timeRange=${timeRange}`)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `security_logs_${new Date().toISOString()}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                })
+                .catch(error => {
+                    console.error('Error exporting logs:', error);
+                    alert('Failed to export logs. Please try again.');
+                });
+        }
+
+        // Load logs on page load
+        document.addEventListener('DOMContentLoaded', loadLogs);
+
+        // Refresh logs every 30 seconds
+        setInterval(loadLogs, 30000);
+    </script>
+</body>
+</html> 
