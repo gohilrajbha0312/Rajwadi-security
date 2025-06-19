@@ -6,183 +6,7 @@
     <title>Rajwadi Security - Logs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #00ff9d;
-            --secondary-color: #00b8ff;
-            --dark-bg: #1a1a1a;
-            --darker-bg: #141414;
-            --card-bg: #242424;
-            --text-color: #ffffff;
-            --text-muted: #888888;
-        }
-
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .sidebar {
-            background-color: var(--darker-bg);
-            min-height: 100vh;
-            padding: 20px;
-            border-right: 1px solid #333;
-        }
-
-        .sidebar .nav-link {
-            color: var(--text-color);
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: rgba(0, 255, 157, 0.1);
-            color: var(--primary-color);
-        }
-
-        .sidebar .nav-link.active {
-            background-color: var(--primary-color);
-            color: var(--darker-bg);
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: none;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: rgba(0, 0, 0, 0.2);
-            border-bottom: 1px solid #333;
-            padding: 15px 20px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--darker-bg);
-        }
-
-        .btn-primary:hover {
-            background-color: #00cc7d;
-            border-color: #00cc7d;
-        }
-
-        .btn-outline {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-color);
-            color: var(--darker-bg);
-        }
-
-        .log-entry {
-            padding: 10px;
-            border-bottom: 1px solid #333;
-            transition: background-color 0.3s ease;
-        }
-
-        .log-entry:hover {
-            background-color: rgba(0, 255, 157, 0.05);
-        }
-
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-
-        .log-time {
-            color: var(--text-muted);
-            font-size: 0.9em;
-        }
-
-        .log-level {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-
-        .log-level.info {
-            background-color: rgba(0, 184, 255, 0.2);
-            color: var(--secondary-color);
-        }
-
-        .log-level.warning {
-            background-color: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
-
-        .log-level.error {
-            background-color: rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-        }
-
-        .log-level.success {
-            background-color: rgba(40, 167, 69, 0.2);
-            color: #28a745;
-        }
-
-        .log-source {
-            color: var(--text-muted);
-            font-size: 0.9em;
-        }
-
-        .log-message {
-            margin-top: 5px;
-            word-break: break-word;
-        }
-
-        .filter-section {
-            background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .form-control, .form-select {
-            background-color: var(--darker-bg);
-            border: 1px solid #333;
-            color: var(--text-color);
-        }
-
-        .form-control:focus, .form-select:focus {
-            background-color: var(--darker-bg);
-            border-color: var(--primary-color);
-            color: var(--text-color);
-            box-shadow: 0 0 0 0.2rem rgba(0, 255, 157, 0.25);
-        }
-
-        .pagination .page-link {
-            background-color: var(--card-bg);
-            border-color: #333;
-            color: var(--text-color);
-        }
-
-        .pagination .page-link:hover {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--darker-bg);
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: var(--darker-bg);
-        }
-    </style>
+    <link href="/static/cyber.css" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -200,8 +24,11 @@
                     <a class="nav-link active" href="/log">
                         <i class="fas fa-list"></i> Log
                     </a>
-                    <a class="nav-link" href="/playbook">
-                        <i class="fas fa-book"></i> Playbook
+                    <a class="nav-link" href="/soc-helper">
+                        <i class="fas fa-user-secret"></i> SOC Helper (AI Help)
+                    </a>
+                    <a class="nav-link mt-4" href="/logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </nav>
             </div>
@@ -220,32 +47,34 @@
                     </div>
                 </div>
 
-                <!-- Filters -->
+                <!-- Real-Time Log Viewer Filters (moved to top) -->
                 <div class="filter-section mb-4">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label class="form-label">Log Level</label>
-                            <select class="form-select" id="logLevel">
-                                <option value="all">All Levels</option>
-                                <option value="info">Info</option>
-                                <option value="warning">Warning</option>
-                                <option value="error">Error</option>
-                                <option value="success">Success</option>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-2">
+                            <label class="form-label">Level</label>
+                            <select class="form-select" id="filterLevel" onchange="filterLogTable()">
+                                <option value="">All</option>
+                                <option value="INFO">INFO</option>
+                                <option value="WARNING">WARNING</option>
+                                <option value="ERROR">ERROR</option>
+                                <option value="SUCCESS">SUCCESS</option>
                             </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label class="form-label">Source</label>
-                            <select class="form-select" id="logSource">
-                                <option value="all">All Sources</option>
-                                <option value="system">System</option>
-                                <option value="security">Security</option>
-                                <option value="network">Network</option>
-                                <option value="application">Application</option>
+                            <select class="form-select" id="filterSource" onchange="filterLogTable()">
+                                <option value="">All</option>
+                                <option value="web">web</option>
+                                <option value="system">system</option>
+                                <option value="security">security</option>
+                                <option value="network">network</option>
+                                <option value="application">application</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <label class="form-label">Time Range</label>
-                            <select class="form-select" id="timeRange">
+                            <select class="form-select" id="filterTimeRange" onchange="filterLogTable()">
+                                <option value="all">All</option>
                                 <option value="1h">Last Hour</option>
                                 <option value="6h">Last 6 Hours</option>
                                 <option value="24h">Last 24 Hours</option>
@@ -254,10 +83,16 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <button class="btn btn-primary w-100" onclick="applyFilters()">
-                                Apply Filters
-                            </button>
+                            <label class="form-label">Start Time</label>
+                            <input type="datetime-local" class="form-control" id="filterStartTime" onchange="filterLogTable()">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">End Time</label>
+                            <input type="datetime-local" class="form-control" id="filterEndTime" onchange="filterLogTable()">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" class="form-control" id="filterSearch" placeholder="Search any field..." oninput="filterLogTable()">
                         </div>
                     </div>
                 </div>
@@ -271,19 +106,30 @@
                     </div>
                 </div>
 
-                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button class="btn btn-outline" onclick="fetchLogs()">
+                        <i class="fas fa-sync-alt me-2"></i>Refresh Logs
+                    </button>
+                </div>
+                <table class="log-table neon-table" id="logTable">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Level</th>
+                            <th>Source</th>
+                            <th>Event ID</th>
+                            <th>Process ID</th>
+                            <th>Name</th>
+                            <th>Host ID</th>
+                            <th>Destination</th>
+                            <th>Message</th>
+                            <th>Extra</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
                 <nav aria-label="Log pagination" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
+                    <ul class="pagination justify-content-center" id="logPagination"></ul>
                 </nav>
             </div>
         </div>
@@ -365,11 +211,182 @@
                 });
         }
 
-        // Load logs on page load
-        document.addEventListener('DOMContentLoaded', loadLogs);
+        // Real-time filter for log table (multi-criteria, debounced)
+        let filterTimeout = null;
+        function filterLogTable() {
+            if (filterTimeout) clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(() => {
+                const fLevel = document.getElementById('filterLevel').value.toLowerCase();
+                const fSource = document.getElementById('filterSource').value.toLowerCase();
+                const fTimeRange = document.getElementById('filterTimeRange').value;
+                const fSearch = document.getElementById('filterSearch').value.toLowerCase();
+                const fStart = document.getElementById('filterStartTime').value;
+                const fEnd = document.getElementById('filterEndTime').value;
+                const now = new Date();
+                const rows = document.getElementById('logTable').querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    let show = true;
+                    if (fLevel && cells[1].textContent.toLowerCase() !== fLevel) show = false;
+                    if (fSource && cells[2].textContent.toLowerCase() !== fSource) show = false;
+                    // Custom time range
+                    if (fStart || fEnd) {
+                        const logTime = new Date(cells[0].textContent);
+                        if (fStart) {
+                            const start = new Date(fStart);
+                            if (logTime < start) show = false;
+                        }
+                        if (fEnd) {
+                            const end = new Date(fEnd);
+                            if (logTime > end) show = false;
+                        }
+                    } else if (fTimeRange && fTimeRange !== 'all') {
+                        const logTime = new Date(cells[0].textContent);
+                        let threshold = new Date(now);
+                        if (fTimeRange === '1h') threshold.setHours(now.getHours() - 1);
+                        else if (fTimeRange === '6h') threshold.setHours(now.getHours() - 6);
+                        else if (fTimeRange === '24h') threshold.setHours(now.getHours() - 24);
+                        else if (fTimeRange === '7d') threshold.setDate(now.getDate() - 7);
+                        else if (fTimeRange === '30d') threshold.setDate(now.getDate() - 30);
+                        if (logTime < threshold) show = false;
+                    }
+                    if (fSearch) {
+                        let found = false;
+                        cells.forEach(cell => {
+                            if (cell.textContent.toLowerCase().includes(fSearch)) found = true;
+                        });
+                        if (!found) show = false;
+                    }
+                    row.style.display = show ? '' : 'none';
+                });
+                // Only reset to page 1 when filters change
+                currentPage = 1;
+                renderPaginatedLogs();
+            }, 100);
+        }
 
-        // Refresh logs every 30 seconds
-        setInterval(loadLogs, 30000);
+        // Pagination state
+        let currentPage = 1;
+        const logsPerPage = 100;
+
+        // Render paginated logs
+        function renderPaginatedLogs() {
+            const rows = Array.from(document.getElementById('logTable').querySelectorAll('tbody tr'));
+            let visibleRows = rows.filter(row => row.style.display !== 'none');
+            // Hide all rows first
+            rows.forEach(row => row.style.display = 'none');
+            // Show only rows for current page
+            const start = (currentPage - 1) * logsPerPage;
+            const end = start + logsPerPage;
+            visibleRows.slice(start, end).forEach(row => row.style.display = '');
+            renderPagination(visibleRows.length);
+        }
+
+        // Render pagination controls
+        function renderPagination(totalVisible) {
+            const totalPages = Math.ceil(totalVisible / logsPerPage) || 1;
+            const pagination = document.getElementById('logPagination');
+            pagination.innerHTML = '';
+            // Previous
+            const prev = document.createElement('li');
+            prev.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+            prev.innerHTML = `<a class="page-link" href="#">Previous</a>`;
+            prev.onclick = function(e) { e.preventDefault(); if (currentPage > 1) { currentPage--; renderPaginatedLogs(); } };
+            pagination.appendChild(prev);
+            // Page numbers (show at most 5, with ellipsis)
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            if (currentPage <= 3) { endPage = Math.min(5, totalPages); }
+            if (currentPage >= totalPages - 2) { startPage = Math.max(1, totalPages - 4); }
+            if (startPage > 1) {
+                const first = document.createElement('li');
+                first.className = 'page-item';
+                first.innerHTML = `<a class="page-link" href="#">1</a>`;
+                first.onclick = function(e) { e.preventDefault(); currentPage = 1; renderPaginatedLogs(); };
+                pagination.appendChild(first);
+                if (startPage > 2) {
+                    const dots = document.createElement('li');
+                    dots.className = 'page-item disabled';
+                    dots.innerHTML = `<span class="page-link">...</span>`;
+                    pagination.appendChild(dots);
+                }
+            }
+            for (let i = startPage; i <= endPage; i++) {
+                const li = document.createElement('li');
+                li.className = 'page-item' + (i === currentPage ? ' active' : '');
+                li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                li.onclick = function(e) { e.preventDefault(); currentPage = i; renderPaginatedLogs(); };
+                pagination.appendChild(li);
+            }
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('li');
+                    dots.className = 'page-item disabled';
+                    dots.innerHTML = `<span class="page-link">...</span>`;
+                    pagination.appendChild(dots);
+                }
+                const last = document.createElement('li');
+                last.className = 'page-item';
+                last.innerHTML = `<a class="page-link" href="#">${totalPages}</a>`;
+                last.onclick = function(e) { e.preventDefault(); currentPage = totalPages; renderPaginatedLogs(); };
+                pagination.appendChild(last);
+            }
+            // Next
+            const next = document.createElement('li');
+            next.className = 'page-item' + (currentPage === totalPages ? ' disabled' : '');
+            next.innerHTML = `<a class="page-link" href="#">Next</a>`;
+            next.onclick = function(e) { e.preventDefault(); if (currentPage < totalPages) { currentPage++; renderPaginatedLogs(); } };
+            pagination.appendChild(next);
+        }
+
+        // Function to fetch real-time logs
+        function fetchLogs() {
+            fetch('/api/logs/realtime')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('logTable').querySelector('tbody');
+                    tbody.innerHTML = '';
+                    if (data.logs) {
+                        data.logs.forEach(log => {
+                            const row = `<tr>
+                                <td>${log.timestamp || ''}</td>
+                                <td>${log.level || ''}</td>
+                                <td>${log.source || ''}</td>
+                                <td>${log.event_id || ''}</td>
+                                <td>${log.process_id || ''}</td>
+                                <td>${log.name || ''}</td>
+                                <td>${log.host_id || ''}</td>
+                                <td>${log.destination || ''}</td>
+                                <td>${log.message || ''}</td>
+                                <td>${log.extra ? JSON.stringify(log.extra) : ''}</td>
+                            </tr>`;
+                            tbody.innerHTML += row;
+                        });
+                        // After logs are loaded, re-apply filter and pagination, but preserve currentPage
+                        const prevPage = currentPage;
+                        filterLogTable();
+                        // After filtering, check if currentPage is still valid
+                        setTimeout(() => {
+                            const rows = Array.from(document.getElementById('logTable').querySelectorAll('tbody tr'));
+                            const visibleRows = rows.filter(row => row.style.display !== 'none');
+                            const totalPages = Math.ceil(visibleRows.length / logsPerPage) || 1;
+                            if (prevPage > totalPages) {
+                                currentPage = totalPages;
+                                renderPaginatedLogs();
+                            } else {
+                                currentPage = prevPage;
+                                renderPaginatedLogs();
+                            }
+                        }, 120);
+                    }
+                });
+        }
+
+        // Load logs on page load
+        document.addEventListener('DOMContentLoaded', fetchLogs);
+
+        // Auto-refresh every 1 second
+        setInterval(fetchLogs, 1000);
     </script>
 </body>
 </html> 

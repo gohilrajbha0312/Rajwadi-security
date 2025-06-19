@@ -3,156 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rajwadi Security - EEP</title>
+    <title>Rajwadi Security - Endpoint Protection (EPP)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #00ff9d;
-            --secondary-color: #00b8ff;
-            --background-dark: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --text-light: #ffffff;
-            --text-muted: #a0a0a0;
-        }
-
-        body {
-            background-color: var(--background-dark);
-            color: var(--text-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .sidebar {
-            background-color: var(--card-bg);
-            min-height: 100vh;
-            padding: 20px;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar .nav-link {
-            color: var(--text-muted);
-            padding: 10px 15px;
-            margin: 5px 0;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: rgba(0, 255, 157, 0.1);
-            color: var(--primary-color);
-        }
-
-        .sidebar .nav-link.active {
-            background-color: var(--primary-color);
-            color: var(--background-dark);
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: none;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: rgba(0, 0, 0, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 20px;
-        }
-
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-active {
-            background-color: rgba(0, 255, 157, 0.2);
-            color: var(--primary-color);
-        }
-
-        .status-warning {
-            background-color: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
-
-        .status-critical {
-            background-color: rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-            color: var(--background-dark);
-            padding: 8px 20px;
-            border-radius: 5px;
-            font-weight: 500;
-        }
-
-        .btn-primary:hover {
-            background-color: #00cc7d;
-            color: var(--background-dark);
-        }
-
-        .btn-outline {
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            background: transparent;
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-color);
-            color: var(--background-dark);
-        }
-
-        .endpoint-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .endpoint-item {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .endpoint-item:hover {
-            background-color: rgba(0, 255, 157, 0.05);
-        }
-
-        .endpoint-item:last-child {
-            border-bottom: none;
-        }
-
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .form-control, .form-select {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-light);
-        }
-
-        .form-control:focus, .form-select:focus {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary-color);
-            color: var(--text-light);
-            box-shadow: 0 0 0 0.25rem rgba(0, 255, 157, 0.25);
-        }
-    </style>
+    <link href="/static/cyber.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body style="background: var(--cyber-bg); color: var(--cyber-text); font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;">
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
-                <h4 class="mb-4">Rajwadi Security</h4>
-                <nav class="nav flex-column">
+            <div class="col-md-2 sidebar d-flex flex-column align-items-start">
+                <div class="w-100 mb-4 text-center">
+                    <h2 class="fw-bold" style="font-family: 'Fira Mono', 'JetBrains Mono', monospace; letter-spacing: 2px; text-shadow: 0 0 16px var(--cyber-primary); color: var(--cyber-primary);">Rajwadi Security</h2>
+                </div>
+                <nav class="nav flex-column w-100">
                     <a class="nav-link" href="/">
                         <i class="fas fa-chart-line"></i> Dashboard
                     </a>
@@ -162,157 +27,276 @@
                     <a class="nav-link" href="/log">
                         <i class="fas fa-list"></i> Log
                     </a>
-                    <a class="nav-link" href="/playbook">
-                        <i class="fas fa-book"></i> Playbook
+                    <a class="nav-link" href="/soc-helper">
+                        <i class="fas fa-user-secret"></i> SOC Helper (AI Help)
+                    </a>
+                    <a class="nav-link mt-4" href="/logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </nav>
             </div>
-
             <!-- Main Content -->
             <div class="col-md-10 p-4">
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <h2>Endpoint Protection</h2>
-                        <p class="text-muted">Monitor and manage endpoint security</p>
-                    </div>
+                <div class="dashboard-header card mb-4 text-center">
+                    <h1 class="mb-2">Endpoint Protection Platform (EPP)</h1>
+                    <p class="lead">Monitor, scan, and protect your endpoints in real time.</p>
                 </div>
-
-                <!-- Protection Status -->
-                <div class="row mb-4">
+                <div class="row g-4 mb-4">
+                    <!-- Endpoint Protection Status -->
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card text-center h-100">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-shield-alt me-2"></i> Protection Status
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">Protection Status</h5>
-                                <div class="d-flex align-items-center mt-3">
-                                    <span class="status-badge status-active me-3">Active</span>
-                                    <span class="text-muted">Last updated: 2 mins ago</span>
-                                </div>
+                                <div class="display-6 fw-bold mb-2" id="epp-status">--</div>
+                                <div class="text-muted">Current Status</div>
+                                <div class="mt-2">Last Scan: <span id="epp-last-scan">--</span></div>
+                                <div>Threats Blocked: <span id="epp-threats-blocked">--</span></div>
                             </div>
                         </div>
                     </div>
+                    <!-- Quick Actions -->
                     <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Threats Blocked</h5>
-                                <h3 class="mt-3">1,234</h3>
-                                <p class="text-muted mb-0">Last 24 hours</p>
+                        <div class="card text-center h-100">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-bolt me-2"></i> Quick Actions
+                            </div>
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <button class="btn btn-primary mb-2 w-100" id="scan-now"><i class="fas fa-search me-2"></i>Scan Now</button>
+                                <button class="btn btn-outline mb-2 w-100" id="update-defs"><i class="fas fa-sync-alt me-2"></i>Update Definitions</button>
+                                <button class="btn btn-outline w-100" id="view-threats"><i class="fas fa-bug me-2"></i>View Threats</button>
                             </div>
                         </div>
                     </div>
+                    <!-- Protection Modules -->
                     <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Protected Endpoints</h5>
-                                <h3 class="mt-3">42</h3>
-                                <p class="text-muted mb-0">Active devices</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0">Quick Actions</h5>
+                        <div class="card text-center h-100">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-cogs me-2"></i> Protection Modules
                             </div>
                             <div class="card-body">
-                                <button class="btn btn-primary me-2" onclick="scanEndpoint()">
-                                    <i class="fas fa-sync-alt me-2"></i>Scan Now
-                                </button>
-                                <button class="btn btn-outline me-2" onclick="updateDefinitions()">
-                                    <i class="fas fa-shield-alt me-2"></i>Update Definitions
-                                </button>
-                                <button class="btn btn-outline" onclick="showSettings()">
-                                    <i class="fas fa-cog me-2"></i>Settings
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Endpoint List -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Endpoint List</h5>
-                                <div class="input-group" style="width: 300px;">
-                                    <input type="text" class="form-control" placeholder="Search endpoints...">
-                                    <button class="btn btn-outline">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="endpoint-list">
-                                    <div class="endpoint-item">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-3">
-                                                <h6 class="mb-0">DESKTOP-ABC123</h6>
-                                                <small class="text-muted">Windows 10 Pro</small>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <span class="status-badge status-active">Protected</span>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <small class="text-muted">Last scan: 2 hours ago</small>
-                                            </div>
-                                            <div class="col-md-3 text-end">
-                                                <button class="btn btn-outline btn-sm">Details</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Add more endpoint items here -->
+                                <div class="d-flex flex-column align-items-start">
+                                    <div class="mb-2"><i class="fas fa-shield-virus me-2"></i> Real-Time Protection: <span id="epp-rtp" class="badge bg-secondary">--</span></div>
+                                    <div class="mb-2"><i class="fas fa-fire me-2"></i> Firewall: <span id="epp-fw" class="badge bg-secondary">--</span></div>
+                                    <div><i class="fas fa-virus me-2"></i> Defender: <span id="epp-defender" class="badge bg-secondary">--</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Protection Settings -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="mb-0">Protection Settings</h5>
+                <!-- Threats Blocked List & Recent Activity -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-bug me-2"></i> Recent Threats Blocked
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="realtimeProtection" checked>
-                                            <label class="form-check-label" for="realtimeProtection">Real-time Protection</label>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="behaviorMonitoring" checked>
-                                            <label class="form-check-label" for="behaviorMonitoring">Behavior Monitoring</label>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="networkProtection" checked>
-                                            <label class="form-check-label" for="networkProtection">Network Protection</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Scan Schedule</label>
-                                            <select class="form-select">
-                                                <option>Daily</option>
-                                                <option>Weekly</option>
-                                                <option>Monthly</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Action on Threat Detection</label>
-                                            <select class="form-select">
-                                                <option>Quarantine</option>
-                                                <option>Delete</option>
-                                                <option>Ask for action</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <ul class="list-group" id="epp-threat-list">
+                                    <li class="list-group-item bg-dark text-white">No recent threats.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white">
+                                <i class="fas fa-history me-2"></i> Recent Activity
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered table-striped mb-0" style="background: var(--cyber-card); color: var(--cyber-text);">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Event</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="epp-activity">
+                                        <tr><td colspan="2">No recent activity.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- System Info -->
+                <div class="card mb-4">
+                    <div class="card-header bg-dark text-white">
+                        <i class="fas fa-info-circle me-2"></i> System Info
+                    </div>
+                    <div class="card-body row text-center">
+                        <div class="col-md-4 mb-2">
+                            <div class="fw-bold" style="color: var(--cyber-accent);">Hostname</div>
+                            <div id="epp-hostname" style="font-size: 1.1em;">--</div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="fw-bold" style="color: var(--cyber-accent);">OS</div>
+                            <div id="epp-os" style="font-size: 1.1em;">--</div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="fw-bold" style="color: var(--cyber-accent);">IP Address</div>
+                            <div id="epp-ip" style="font-size: 1.1em;">--</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- EPP Policy Management: Sectioned Controls -->
+                <div class="row g-4 mb-4">
+                    <!-- Real-time Protection -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-shield-virus me-2"></i> Real-Time Protection</div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="policy-rtp" checked>
+                                    <label class="form-check-label" for="policy-rtp">Enable Real-Time Protection</label>
                                 </div>
+                                <button class="btn btn-primary w-100" id="apply-rtp"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Firewall -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-fire me-2"></i> Firewall</div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="policy-fw" checked>
+                                    <label class="form-check-label" for="policy-fw">Enable Firewall</label>
+                                </div>
+                                <button class="btn btn-primary w-100" id="apply-fw"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- USB Device Control -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-usb me-2"></i> USB Device Control</div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="policy-usb">
+                                    <label class="form-check-label" for="policy-usb">Block USB Storage Devices</label>
+                                </div>
+                                <button class="btn btn-primary w-100" id="apply-usb"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Application Allow/Block List -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-list-alt me-2"></i> Application Allow/Block List</div>
+                            <div class="card-body">
+                                <label class="form-label">Allowed Applications (comma separated)</label>
+                                <input type="text" class="form-control mb-2" id="policy-app-allow" placeholder="e.g. chrome.exe, notepad.exe">
+                                <label class="form-label">Blocked Applications (comma separated)</label>
+                                <input type="text" class="form-control mb-2" id="policy-app-block" placeholder="e.g. powershell.exe, cmd.exe">
+                                <button class="btn btn-primary w-100" id="apply-app"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Web Filtering -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-globe me-2"></i> Web Filtering</div>
+                            <div class="card-body">
+                                <label class="form-label">Blocked Sites (comma separated)</label>
+                                <input type="text" class="form-control mb-2" id="policy-web-block" placeholder="e.g. facebook.com, youtube.com">
+                                <button class="btn btn-primary w-100" id="apply-web"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Scheduled Scans -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-calendar-alt me-2"></i> Scheduled Scans</div>
+                            <div class="card-body">
+                                <label class="form-label">Scan Frequency</label>
+                                <select class="form-select mb-3" id="policy-scan">
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                                <button class="btn btn-primary w-100" id="apply-scan"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Automatic Updates -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-sync-alt me-2"></i> Automatic Updates</div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="policy-auto-update" checked>
+                                    <label class="form-check-label" for="policy-auto-update">Enable Automatic Updates</label>
+                                </div>
+                                <button class="btn btn-primary w-100" id="apply-auto-update"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Threat Response Actions -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-exclamation-triangle me-2"></i> Threat Response</div>
+                            <div class="card-body">
+                                <label class="form-label">Action on Threat Detection</label>
+                                <select class="form-select mb-3" id="policy-threat-response">
+                                    <option value="quarantine">Quarantine</option>
+                                    <option value="delete">Delete</option>
+                                    <option value="alert">Alert Only</option>
+                                </select>
+                                <button class="btn btn-primary w-100" id="apply-threat-response"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- RDP/Remote Access Control -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-desktop me-2"></i> RDP/Remote Access Control</div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="policy-rdp">
+                                    <label class="form-check-label" for="policy-rdp">Disable RDP/Remote Access</label>
+                                </div>
+                                <button class="btn btn-primary w-100" id="apply-rdp"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Windows Defender/AV Settings -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-shield-alt me-2"></i> Windows Defender/AV</div>
+                            <div class="card-body">
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="policy-defender" checked>
+                                    <label class="form-check-label" for="policy-defender">Enable Windows Defender/AV</label>
+                                </div>
+                                <button class="btn btn-primary w-100" id="apply-defender"><i class="fas fa-check-circle me-2"></i>Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Browser Block Policy -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-dark text-white"><i class="fas fa-globe me-2"></i> Browser Block</div>
+                            <div class="card-body">
+                                <label class="form-label">Block the following browsers:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="block-chrome">
+                                    <label class="form-check-label" for="block-chrome">Chrome</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="block-edge">
+                                    <label class="form-check-label" for="block-edge">Edge</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="block-firefox">
+                                    <label class="form-check-label" for="block-firefox">Firefox</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="block-opera">
+                                    <label class="form-check-label" for="block-opera">Opera</label>
+                                </div>
+                                <button class="btn btn-primary w-100 mt-3" id="apply-browser-block"><i class="fas fa-check-circle me-2"></i>Apply</button>
                             </div>
                         </div>
                     </div>
@@ -320,192 +304,364 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Function to update protection status
-        function updateProtectionStatus() {
-            fetch('/api/eep/status')
-                .then(response => response.json())
-                .then(data => {
-                    const statusBadge = document.querySelector('.status-badge');
-                    if (data.status === 'Active') {
-                        statusBadge.className = 'status-badge status-active';
-                    } else {
-                        statusBadge.className = 'status-badge status-warning';
-                    }
-                    statusBadge.textContent = data.status;
-                    
-                    // Update last updated time
-                    document.querySelector('.text-muted').textContent = `Last updated: ${data.last_updated}`;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Function to update endpoint details
-        function updateEndpointDetails() {
+        // Placeholder: Fetch and update EPP status, modules, threats, activity, and system info
+        function updateEPP() {
             fetch('/api/eep/endpoint')
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
-                    // Update threats blocked
-                    document.querySelector('h3:nth-of-type(1)').textContent = data.threats_blocked;
-                    
-                    // Update protected endpoints count
-                    document.querySelector('h3:nth-of-type(2)').textContent = data.protected_endpoints.length;
-                    
-                    // Update endpoint list
-                    const endpointList = document.querySelector('.endpoint-list');
-                    endpointList.innerHTML = data.protected_endpoints.map(endpoint => `
-                        <div class="endpoint-item">
-                            <div class="row align-items-center">
-                                <div class="col-md-3">
-                                    <h6 class="mb-0">${endpoint.hostname}</h6>
-                                    <small class="text-muted">${endpoint.os}</small>
-                                </div>
-                                <div class="col-md-3">
-                                    <span class="status-badge ${endpoint.protection_status.status === 'Active' ? 'status-active' : 'status-warning'}">${endpoint.protection_status.status}</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <small class="text-muted">Last scan: ${endpoint.last_scan}</small>
-                                </div>
-                                <div class="col-md-3 text-end">
-                                    <button class="btn btn-outline btn-sm" onclick="scanEndpoint()">Scan Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
+                    document.getElementById('epp-status').textContent = data.protection_status?.status || '--';
+                    document.getElementById('epp-last-scan').textContent = data.last_scan || '--';
+                    document.getElementById('epp-threats-blocked').textContent = data.threats_blocked || '0';
+                    document.getElementById('epp-rtp').textContent = data.protection_status?.realtime ? 'On' : 'Off';
+                    document.getElementById('epp-fw').textContent = data.protection_status?.firewall ? 'On' : 'Off';
+                    document.getElementById('epp-defender').textContent = data.protection_status?.defender ? 'On' : 'Off';
+                    document.getElementById('epp-hostname').textContent = data.hostname || '--';
+                    document.getElementById('epp-os').textContent = data.os || '--';
+                    document.getElementById('epp-ip').textContent = data.ip_address || '--';
+                    // Threats Blocked List
+                    const threatList = document.getElementById('epp-threat-list');
+                    threatList.innerHTML = '';
+                    if (data.threats_blocked && data.threats_blocked > 0) {
+                        threatList.innerHTML = `<li class='list-group-item bg-dark text-white'>Threats blocked: ${data.threats_blocked}</li>`;
+                    } else {
+                        threatList.innerHTML = `<li class='list-group-item bg-dark text-white'>No recent threats.</li>`;
+                    }
+                    // Recent Activity (logs)
+                    const activity = document.getElementById('epp-activity');
+                    activity.innerHTML = '';
+                    if (data.protected_endpoints && data.protected_endpoints.length > 0) {
+                        data.protected_endpoints.forEach(ep => {
+                            activity.innerHTML += `<tr><td>${ep.last_scan || '--'}</td><td>${ep.status || '--'}</td></tr>`;
+                        });
+                    } else {
+                        activity.innerHTML = '<tr><td colspan="2">No recent activity.</td></tr>';
+                    }
                 })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Function to scan endpoint
-        function scanEndpoint() {
-            fetch('/api/eep/scan', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'Completed') {
-                    updateEndpointDetails();
-                    alert(`Scan completed successfully!\nThreats found: ${data.threats_found}`);
-                } else {
-                    alert('Scan failed: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Scan failed: ' + error);
-            });
-        }
-
-        // Function to update definitions
-        function updateDefinitions() {
-            fetch('/api/eep/update-definitions', {
-                method: 'POST'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'Completed') {
-                    alert('Definitions updated successfully!\nLast update: ' + data.last_update);
-                } else {
-                    alert('Update failed: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Update failed: ' + error);
-            });
-        }
-
-        // Function to show settings
-        function showSettings() {
-            fetch('/api/eep/settings')
-                .then(response => response.json())
-                .then(settings => {
-                    // Update the settings UI
-                    document.getElementById('realtimeProtection').checked = settings.realtime_protection;
-                    document.getElementById('behaviorMonitoring').checked = settings.behavior_monitoring;
-                    document.getElementById('networkProtection').checked = settings.network_protection;
-                    
-                    // Show settings section
-                    document.querySelector('.card:nth-last-child(1)').scrollIntoView({ behavior: 'smooth' });
-                })
-                .catch(error => {
-                    console.error('Error fetching settings:', error);
-                    alert('Failed to load settings. Please try again.');
+                .catch(() => {
+                    document.getElementById('epp-status').textContent = '--';
                 });
         }
-
-        // Function to update settings
-        function updateSettings(settings) {
-            fetch('/api/eep/settings', {
+        updateEPP();
+        setInterval(updateEPP, 5000);
+        // Quick Actions (placeholders)
+        document.getElementById('scan-now').onclick = function() {
+            fetch('/api/eep/scan', {method: 'POST'})
+                .then(res => res.json())
+                .then(data => { alert('Scan started!'); updateEPP(); })
+                .catch(() => { alert('Failed to start scan.'); });
+        };
+        document.getElementById('update-defs').onclick = function() {
+            fetch('/api/eep/update-definitions', {method: 'POST'})
+                .then(res => res.json())
+                .then(data => { alert('Definitions updated!'); updateEPP(); })
+                .catch(() => { alert('Failed to update definitions.'); });
+        };
+        document.getElementById('view-threats').onclick = function() {
+            alert('Threats view coming soon!');
+        };
+        document.getElementById('apply-rtp').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(settings)
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
             })
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                if (data.status === 'Success') {
-                    // Show success message
-                    const toast = document.createElement('div');
-                    toast.className = 'toast show position-fixed bottom-0 end-0 m-3';
-                    toast.innerHTML = `
-                        <div class="toast-header bg-success text-white">
-                            <strong class="me-auto">Success</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-                        </div>
-                        <div class="toast-body">
-                            Settings updated successfully
-                        </div>
-                    `;
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 3000);
-                } else {
-                    throw new Error(data.error || 'Failed to update settings');
-                }
+                alert(data.message || 'Policy applied!');
+                updateEPP();
             })
-            .catch(error => {
-                console.error('Error updating settings:', error);
-                alert('Failed to update settings: ' + error.message);
+            .catch(() => {
+                alert('Failed to apply policy.');
             });
-        }
-
-        // Add event listeners for protection settings
-        document.getElementById('realtimeProtection').addEventListener('change', function(e) {
-            updateSettings({
-                realtime_protection: e.target.checked,
-                behavior_monitoring: document.getElementById('behaviorMonitoring').checked,
-                network_protection: document.getElementById('networkProtection').checked
+        };
+        document.getElementById('apply-fw').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
             });
-        });
-
-        document.getElementById('behaviorMonitoring').addEventListener('change', function(e) {
-            updateSettings({
-                realtime_protection: document.getElementById('realtimeProtection').checked,
-                behavior_monitoring: e.target.checked,
-                network_protection: document.getElementById('networkProtection').checked
+        };
+        document.getElementById('apply-usb').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
             });
-        });
-
-        document.getElementById('networkProtection').addEventListener('change', function(e) {
-            updateSettings({
-                realtime_protection: document.getElementById('realtimeProtection').checked,
-                behavior_monitoring: document.getElementById('behaviorMonitoring').checked,
-                network_protection: e.target.checked
+        };
+        document.getElementById('apply-app').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
             });
-        });
-
-        // Update data every 5 seconds
-        setInterval(() => {
-            updateProtectionStatus();
-            updateEndpointDetails();
-        }, 5000);
-
-        // Initial update
-        updateProtectionStatus();
-        updateEndpointDetails();
+        };
+        document.getElementById('apply-web').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
+            });
+        };
+        document.getElementById('apply-scan').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
+            });
+        };
+        document.getElementById('apply-auto-update').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
+            });
+        };
+        document.getElementById('apply-threat-response').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
+            });
+        };
+        document.getElementById('apply-rdp').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
+            });
+        };
+        document.getElementById('apply-defender').onclick = function() {
+            const policy = {
+                rtp: document.getElementById('policy-rtp').checked,
+                firewall: document.getElementById('policy-fw').checked,
+                usb: document.getElementById('policy-usb').checked,
+                app_allow: document.getElementById('policy-app-allow').value.split(',').map(x => x.trim()).filter(x => x),
+                app_block: document.getElementById('policy-app-block').value.split(',').map(x => x.trim()).filter(x => x),
+                web_block: document.getElementById('policy-web-block').value.split(',').map(x => x.trim()).filter(x => x),
+                scan: document.getElementById('policy-scan').value,
+                auto_update: document.getElementById('policy-auto-update').checked,
+                threat_response: document.getElementById('policy-threat-response').value,
+                rdp: document.getElementById('policy-rdp').checked,
+                defender: document.getElementById('policy-defender').checked
+            };
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(policy)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply policy.');
+            });
+        };
+        // Browser Block Apply Button
+        document.getElementById('apply-browser-block').onclick = function() {
+            const blockedBrowsers = [];
+            if (document.getElementById('block-chrome').checked) blockedBrowsers.push('chrome');
+            if (document.getElementById('block-edge').checked) blockedBrowsers.push('edge');
+            if (document.getElementById('block-firefox').checked) blockedBrowsers.push('firefox');
+            if (document.getElementById('block-opera').checked) blockedBrowsers.push('opera');
+            fetch('/api/eep/apply-policy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ browser_block: blockedBrowsers })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message || 'Browser block policy applied!');
+                updateEPP();
+            })
+            .catch(() => {
+                alert('Failed to apply browser block policy.');
+            });
+        };
     </script>
 </body>
 </html> 

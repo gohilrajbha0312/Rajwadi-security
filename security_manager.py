@@ -131,7 +131,6 @@ class SecurityManager:
             self.logger.error(f"Error getting protected endpoints: {str(e)}")
             return []
 
-    @lru_cache(maxsize=32)
     def get_system_info(self):
         try:
             return {
@@ -300,7 +299,6 @@ class SecurityManager:
             self.logger.error(f"Error getting network connections: {str(e)}")
             return {'connections': [], 'interfaces': {}}
 
-    @lru_cache(maxsize=1)
     def get_running_processes(self):
         try:
             processes = []
@@ -309,18 +307,14 @@ class SecurityManager:
                 try:
                     # Get process info
                     pinfo = proc.info
-                    
                     # Calculate CPU percent if not available
                     if pinfo['cpu_percent'] is None:
                         pinfo['cpu_percent'] = proc.cpu_percent(interval=0.1)
-                    
                     # Calculate memory percent if not available
                     if pinfo['memory_percent'] is None:
                         pinfo['memory_percent'] = proc.memory_percent()
-                    
                     # Get process creation time
                     create_time = datetime.fromtimestamp(pinfo['create_time']) if pinfo['create_time'] else None
-                    
                     # Add process info
                     processes.append({
                         'pid': pinfo['pid'],
@@ -334,11 +328,8 @@ class SecurityManager:
                 except Exception as e:
                     self.logger.error(f"Error getting process info: {str(e)}")
                     continue
-
             # Sort by CPU usage and memory usage
             processes.sort(key=lambda x: (x['cpu_percent'], x['memory_percent']), reverse=True)
-            
-            # Return top 10 processes
             return processes[:10]
         except Exception as e:
             self.logger.error(f"Error getting running processes: {str(e)}")
@@ -523,17 +514,21 @@ class SecurityManager:
             self.logger.error(f"Error updating EEP settings: {str(e)}")
             raise
 
-    def add_log(self, level, source, message):
+    def add_log(self, level, source, message, event_id=None, process_id=None, name=None, host_id=None, destination=None, extra=None):
         with self.logs_lock:
             log_entry = {
                 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 'level': level,
                 'source': source,
-                'message': message
+                'message': message,
+                'event_id': event_id,
+                'process_id': process_id,
+                'name': name,
+                'host_id': host_id,
+                'destination': destination,
+                'extra': extra
             }
             self.logs.append(log_entry)
-            
-            # Maintain max logs limit
             if len(self.logs) > self.max_logs:
                 self.logs.pop(0)
 
@@ -681,4 +676,38 @@ class SecurityManager:
             return playbook_data
         except Exception as e:
             self.logger.error(f"Error updating playbook: {str(e)}")
-            raise 
+            raise
+
+    def get_uptime(self):
+        try:
+            import psutil, time
+            boot_time = psutil.boot_time()
+            uptime_seconds = int(time.time() - boot_time)
+            hours, remainder = divmod(uptime_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            return f"{hours:02}:{minutes:02}:{seconds:02}"
+        except Exception as e:
+            self.logger.error(f"Error getting uptime: {str(e)}")
+            return "Unavailable"
+
+    def get_disk_usage(self):
+        try:
+            import psutil
+            usage = psutil.disk_usage('C:\\')
+            return {
+                'total': usage.total,
+                'used': usage.used,
+                'free': usage.free,
+                'percent': usage.percent
+            }
+        except Exception as e:
+            self.logger.error(f"Error getting disk usage: {str(e)}")
+            return {'total': 0, 'used': 0, 'free': 0, 'percent': 0}
+
+    def get_current_time(self):
+        try:
+            from datetime import datetime
+            return datetime.now().strftime('%H:%M:%S')
+        except Exception as e:
+            self.logger.error(f"Error getting current time: {str(e)}")
+            return "Unavailable" 

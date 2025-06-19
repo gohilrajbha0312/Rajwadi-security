@@ -1,0 +1,169 @@
+/* --- Flat Cyber Security Theme --- */
+:root {
+  --cyber-bg: #101014;
+  --cyber-panel: #18181c;
+  --cyber-card: #23232a;
+  --cyber-accent: #00ff9d;
+  --cyber-danger: #ff0059;
+  --cyber-text: #fff;
+  --cyber-muted: #b0b0b0;
+  --cyber-border: #222;
+  --cyber-radius: 14px;
+  --cyber-padding: 1.5rem;
+}
+
+body {
+  background: var(--cyber-bg);
+  color: var(--cyber-text);
+  font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.sidebar {
+  background: var(--cyber-panel);
+  color: var(--cyber-text);
+  border-right: 3px solid var(--cyber-accent);
+  min-height: 100vh;
+  padding: 2rem 1rem 2rem 1.5rem;
+}
+.sidebar .nav-link {
+  color: var(--cyber-text);
+  border-radius: var(--cyber-radius);
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar .nav-link.active, .sidebar .nav-link:hover {
+  background: var(--cyber-accent);
+  color: var(--cyber-bg);
+}
+.sidebar .nav-link i {
+  width: 22px;
+  text-align: center;
+}
+
+.card, .filter-section {
+  background: var(--cyber-card);
+  border-radius: var(--cyber-radius);
+  border: 1.5px solid var(--cyber-border);
+  margin-bottom: 2rem;
+  padding: var(--cyber-padding);
+}
+
+.card-header {
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: var(--cyber-radius) var(--cyber-radius) 0 0;
+  padding: 1rem 1.2rem;
+  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+  background: var(--cyber-accent);
+  color: var(--cyber-bg);
+  letter-spacing: 1px;
+  border-bottom: 1.5px solid var(--cyber-border);
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--cyber-accent);
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Segoe UI', monospace;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.btn, .btn-primary, .btn-outline {
+  background: var(--cyber-accent);
+  color: var(--cyber-bg);
+  border: 1.5px solid var(--cyber-accent);
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+}
+.btn:hover, .btn-primary:hover, .btn-outline:hover {
+  background: var(--cyber-bg);
+  color: var(--cyber-accent);
+}
+
+.form-control, .form-select {
+  background: var(--cyber-panel);
+  color: var(--cyber-text);
+  border: 1.5px solid var(--cyber-accent);
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.5rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--cyber-accent);
+}
+
+.log-table, .neon-table {
+  background: var(--cyber-card);
+  color: var(--cyber-text);
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 2rem;
+  border: 1.5px solid var(--cyber-border);
+}
+.log-table th, .neon-table th {
+  background: var(--cyber-accent);
+  color: var(--cyber-bg);
+  font-weight: bold;
+  border-bottom: 2px solid var(--cyber-border);
+  font-size: 1.1rem;
+  padding: 0.9rem 0.7rem;
+}
+.log-table td, .neon-table td {
+  border-bottom: 1px solid var(--cyber-border);
+  padding: 0.7rem 0.7rem;
+  font-size: 1rem;
+}
+.log-table tr:hover, .neon-table tr:hover {
+  background: #18181c;
+}
+
+.badge-accent { background: var(--cyber-accent); color: var(--cyber-bg); }
+.badge-red { background: var(--cyber-danger); color: var(--cyber-bg); }
+
+.pagination .page-link {
+  background: var(--cyber-card);
+  color: var(--cyber-text);
+  border: 1.5px solid var(--cyber-accent);
+  font-size: 1.1rem;
+  border-radius: 6px;
+}
+.pagination .page-item.active .page-link {
+  background: var(--cyber-accent);
+  color: var(--cyber-bg);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: var(--cyber-panel);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-accent);
+  border-radius: 4px;
+}
+
+input:focus, select:focus, button:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--cyber-accent) !important;
+}
+
+.filter-section {
+  margin-bottom: 2.5rem;
+  border: 2px solid var(--cyber-accent);
+}
+
+.login-container, .modal-content {
+  background: var(--cyber-panel);
+  border-radius: 16px;
+  border: 2px solid var(--cyber-accent);
+} 

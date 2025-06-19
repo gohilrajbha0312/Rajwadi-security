@@ -1,14 +1,17 @@
-from flask import Flask, render_template, jsonify, request, make_response
+from flask import Flask, render_template, jsonify, request, make_response, session, redirect, url_for, flash
 from security_manager import SecurityManager
 import logging
 from datetime import datetime
 import random
-from playbook import PlaybookManager
 import os
 import json
 from functools import wraps
 import time
 import subprocess
+import requests
+import threading
+import socket
+import platform
 
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
@@ -18,11 +21,13 @@ playbooks_dir = r"C:\Users\gohil\OneDrive\Desktop\python\playbooks"
 
 # Initialize managers
 security_manager = SecurityManager()
-playbook_manager = PlaybookManager()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Secret key for session management
+app.secret_key = 'your_secret_key_here'
 
 # Cache decorator
 def cache_response(timeout=5):
@@ -41,14 +46,62 @@ def cache_response(timeout=5):
         return decorated_function
     return decorator
 
+@app.before_request
+def log_every_request():
+    # Log every request path as a real log entry with more details
+    security_manager.add_log(
+        'INFO', 'web', f'Endpoint accessed: {request.path}',
+        event_id='1000',
+        process_id=os.getpid(),
+        name=request.endpoint,
+        host_id=request.remote_addr,
+        destination=request.host,
+        extra={'method': request.method}
+    )
+
+# Login required decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route('/')
+@login_required
 def index():
+    def get_ip_address():
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            s.close()
+        except Exception:
+            ip = "Unavailable"
+        return ip
     app.logger.info("Accessing Dashboard")
-    return render_template('index.html')
+    security_manager.add_log('INFO', 'web', 'Dashboard accessed', event_id='1001', process_id=os.getpid(), name='index', host_id=request.remote_addr, destination=request.host)
+    # Get system info, cpu, memory, threat for dashboard cards
+    system_info = security_manager.system_info if hasattr(security_manager, 'system_info') else {}
+    cpu = security_manager.get_cpu_usage() if hasattr(security_manager, 'get_cpu_usage') else {'current': 0}
+    memory = security_manager.get_memory_usage() if hasattr(security_manager, 'get_memory_usage') else {'current': 0}
+    threat = 'Normal'
+    # Ensure hostname, os, and ip are always present and reliable
+    hostname = system_info.get('hostname') or socket.gethostname()
+    os_name = system_info.get('os') or (platform.system() + " " + platform.release())
+    ip = get_ip_address()
+    return render_template('index.html', system_info=system_info, cpu=cpu, memory=memory, threat=threat, hostname=hostname, os=os_name, ip=ip)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
 
 @app.route('/eep')
 def eep_page():
     app.logger.info("Accessing EEP page")
+    security_manager.add_log('INFO', 'web', 'EEP page accessed', event_id='1002', process_id=os.getpid(), name='eep_page', host_id=request.remote_addr, destination=request.host)
     return render_template('eep.html')
 
 @app.route('/api/eep/status')
@@ -119,7 +172,6 @@ def get_endpoint_details():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/security/metrics')
-@cache_response(timeout=5)  # Cache for 5 seconds
 def get_metrics():
     try:
         # Get system information
@@ -147,6 +199,11 @@ def get_metrics():
         # Get system status
         system_status = get_system_status()
         
+        # Add new real-time metrics
+        uptime = security_manager.get_uptime()
+        disk = security_manager.get_disk_usage()
+        current_time = security_manager.get_current_time()
+        
         return jsonify({
             'system_info': system_info,
             'cpu': {
@@ -164,7 +221,10 @@ def get_metrics():
             },
             'processes': processes,
             'threat': threat_level,
-            'status': system_status
+            'status': system_status,
+            'uptime': uptime,
+            'disk': disk,
+            'current_time': current_time
         })
     except Exception as e:
         logger.error(f"Error getting metrics: {str(e)}")
@@ -267,6 +327,7 @@ def get_system_status():
 @app.route('/log')
 def log_page():
     app.logger.info("Accessing Log page")
+    security_manager.add_log('INFO', 'web', 'Log page accessed', event_id='1003', process_id=os.getpid(), name='log_page', host_id=request.remote_addr, destination=request.host)
     return render_template('log.html')
 
 @app.route('/api/logs')
@@ -308,187 +369,196 @@ def export_logs():
         app.logger.error(f"Error exporting logs: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/playbook')
-def playbook_page():
-    try:
-        # Ensure playbooks directory exists
-        if not os.path.exists(playbooks_dir):
-            os.makedirs(playbooks_dir)
-            logger.info(f"Created playbooks directory: {playbooks_dir}")
-        
-        # Open VS Code in the playbooks directory
-        if os.name == 'nt':  # Windows
-            vscode_path = r'C:\Users\gohil\AppData\Local\Programs\Microsoft VS Code\Code.exe'
-            if os.path.exists(vscode_path):
-                subprocess.Popen([vscode_path, playbooks_dir])
-                logger.info(f"Opened VS Code in directory: {playbooks_dir}")
-            else:
-                logger.error("VS Code not found at the expected path")
-        
-        app.logger.info("Accessing Playbook page")
-        return render_template('playbook.html')
-    except Exception as e:
-        logger.error(f"Error opening playbooks directory: {str(e)}")
-        return render_template('playbook.html')
+@app.route('/soc-helper')
+@login_required
+def soc_helper():
+    return render_template('soc_helper.html')
 
-@app.route('/api/playbooks', methods=['GET'])
-def get_playbooks():
-    """Get all playbooks"""
+@app.route('/api/logs/realtime')
+def get_realtime_logs():
     try:
-        playbooks = playbook_manager.get_playbooks()
-        return jsonify(playbooks)
+        logs = security_manager.get_logs(level='all', source='all', time_range='1h')
+        return jsonify({'logs': logs})
     except Exception as e:
-        logger.error(f"Error getting playbooks: {str(e)}")
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/api/playbooks', methods=['POST'])
-def create_playbook():
-    try:
-        playbook_data = request.json
-        
-        # Validate required fields
-        required_fields = ['title', 'description', 'category', 'tags', 'steps']
-        if not all(field in playbook_data for field in required_fields):
-            return jsonify({'error': 'Missing required fields'}), 400
-        
-        # Validate data types
-        if not isinstance(playbook_data['tags'], list):
-            return jsonify({'error': 'Tags must be a list'}), 400
-        if not isinstance(playbook_data['steps'], list):
-            return jsonify({'error': 'Steps must be a list'}), 400
-        
-        # Ensure playbooks directory exists
-        if not os.path.exists(playbooks_dir):
-            os.makedirs(playbooks_dir)
-            logger.info(f"Created playbooks directory: {playbooks_dir}")
-        
-        # Add playbook to manager
-        new_playbook = playbook_manager.add_playbook(playbook_data)
-        
-        # Save playbook to file
-        try:
-            filename = f"playbook_{new_playbook['id']}.json"
-            filepath = os.path.join(playbooks_dir, filename)
-            
-            with open(filepath, 'w') as f:
-                json.dump(new_playbook, f, indent=4)
-            
-            logger.info(f"Saved playbook to file: {filepath}")
-            
-            # Open VS Code in the playbooks directory
-            if os.name == 'nt':  # Windows
-                vscode_path = r'C:\Users\gohil\AppData\Local\Programs\Microsoft VS Code\Code.exe'
-                if os.path.exists(vscode_path):
-                    subprocess.Popen([vscode_path, playbooks_dir])
-                    logger.info(f"Opened VS Code in directory: {playbooks_dir}")
-        
-        except Exception as e:
-            logger.error(f"Error saving playbook file: {str(e)}")
-            return jsonify({
-                'status': 'Error',
-                'message': f'Playbook created but failed to save file: {str(e)}'
-            }), 500
-        
-        return jsonify({
-            'status': 'success',
-            'message': 'Playbook created successfully',
-            'playbook': new_playbook,
-            'file_path': filepath
-        })
-    except Exception as e:
-        logger.error(f"Error creating playbook: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/playbooks/<playbook_id>', methods=['DELETE', 'PUT'])
-def manage_playbook(playbook_id):
-    if request.method == 'DELETE':
-        try:
-            result = playbook_manager.delete_playbook(playbook_id)
-            if result:
-                return jsonify({
-                    'status': 'Success',
-                    'message': 'Playbook deleted successfully'
-                })
-            else:
-                return jsonify({
-                    'status': 'Error',
-                    'message': 'Failed to delete playbook'
-                }), 500
-        except Exception as e:
-            app.logger.error(f"Error deleting playbook: {str(e)}")
-            return jsonify({
-                'status': 'Error',
-                'error': str(e)
-            }), 500
-    else:  # PUT request
-        try:
-            updated_playbook = request.get_json()
-            result = playbook_manager.update_playbook(playbook_id, updated_playbook)
-            return jsonify({
-                'status': 'Success',
-                'message': 'Playbook updated successfully',
-                'playbook': result
-            })
-        except Exception as e:
-            app.logger.error(f"Error updating playbook: {str(e)}")
-            return jsonify({
-                'status': 'Error',
-                'error': str(e)
-            }), 500
-
-@app.route('/api/playbooks/delete-all', methods=['DELETE'])
-def delete_all_playbooks():
+# --- 1. Threat Intelligence Integration ---
+@app.route('/api/threat-intel/<ip>')
+def threat_intel_lookup(ip):
     try:
-        result = playbook_manager.delete_all_playbooks()
-        if result:
-            return jsonify({
-                'status': 'Success',
-                'message': 'All playbooks deleted successfully'
-            })
+        api_key = 'YOUR_ABUSEIPDB_API_KEY'  # Replace with your real key
+        url = f'https://api.abuseipdb.com/api/v2/check?ipAddress={ip}'
+        headers = {'Key': api_key, 'Accept': 'application/json'}
+        response = requests.get(url, headers=headers)
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# --- 2. Alerting & Notification System (scaffold) ---
+@app.route('/api/alerts', methods=['GET', 'POST'])
+def alerts():
+    if request.method == 'POST':
+        # Placeholder: Add alert rule
+        return jsonify({'status': 'Alert rule added (placeholder)'}), 201
+    else:
+        # Placeholder: Get alerts
+        return jsonify({'alerts': []})
+
+# --- 3. UEBA (scaffold) ---
+@app.route('/api/ueba')
+def ueba():
+    # Placeholder: Return user/entity behavior analytics
+    return jsonify({'ueba': 'UEBA data (placeholder)'})
+
+# --- 4. Incident Response Playbooks (scaffold) ---
+@app.route('/api/ir-playbooks')
+def ir_playbooks():
+    # Placeholder: Return IR playbooks
+    return jsonify({'playbooks': []})
+
+# --- 5. Automated Log Enrichment (scaffold) ---
+@app.route('/api/logs/enrich')
+def enrich_logs():
+    # Placeholder: Return enriched logs
+    return jsonify({'logs': []})
+
+# --- 6. Advanced Search & Filtering (scaffold) ---
+@app.route('/api/logs/search')
+def search_logs():
+    # Placeholder: Return search results
+    return jsonify({'results': []})
+
+# --- 7. Custom Dashboards & Reporting (scaffold) ---
+@app.route('/api/dashboards')
+def dashboards():
+    # Placeholder: Return dashboards
+    return jsonify({'dashboards': []})
+
+# --- 8. File Integrity Monitoring (scaffold) ---
+@app.route('/api/file-integrity')
+def file_integrity():
+    # Placeholder: Return file integrity status
+    return jsonify({'integrity': 'OK (placeholder)'})
+
+# --- 9. EDR/AV/Firewall Integration (scaffold) ---
+@app.route('/api/integrations')
+def integrations():
+    # Placeholder: Return integration status
+    return jsonify({'integrations': []})
+
+# --- 10. Case Management (scaffold) ---
+@app.route('/api/cases')
+def cases():
+    # Placeholder: Return cases
+    return jsonify({'cases': []})
+
+# --- 11. MITRE ATT&CK Mapping (scaffold) ---
+@app.route('/api/mitre')
+def mitre():
+    # Placeholder: Return MITRE mapping
+    return jsonify({'mitre': []})
+
+# --- 12. Anomaly Detection (scaffold) ---
+@app.route('/api/anomalies')
+def anomalies():
+    # Placeholder: Return anomalies
+    return jsonify({'anomalies': []})
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # Simple authentication logic (replace with your own as needed)
+        if username == 'admin' and password == 'admin':
+            session['logged_in'] = True
+            return redirect(url_for('index'))
         else:
-            return jsonify({
-                'status': 'Error',
-                'message': 'Failed to delete all playbooks'
-            }), 500
-    except Exception as e:
-        logger.error(f"Error deleting all playbooks: {str(e)}")
-        return jsonify({
-            'status': 'Error',
-            'error': str(e)
-        }), 500
+            flash('Invalid credentials')
+    return render_template('login.html')
 
-@app.route('/api/open-playbooks-directory', methods=['POST'])
-def open_playbooks_directory():
+@app.route('/api/eep/apply-policy', methods=['POST'])
+def apply_eep_policy():
     try:
-        # Ensure the directory exists
-        if not os.path.exists(playbooks_dir):
-            os.makedirs(playbooks_dir)
-            logger.info(f"Created directory: {playbooks_dir}")
-        
-        # Open VS Code in the playbooks directory
-        if os.name == 'nt':  # Windows
-            vscode_path = r'C:\Users\gohil\AppData\Local\Programs\Microsoft VS Code\Code.exe'
-            if os.path.exists(vscode_path):
-                subprocess.Popen([vscode_path, playbooks_dir])
-                logger.info(f"Opened VS Code in directory: {playbooks_dir}")
-                return jsonify({
-                    'status': 'Success',
-                    'message': 'Opened playbooks directory in VS Code'
-                })
-            else:
-                raise Exception("VS Code not found at the expected path")
-        else:  # Linux/Mac
-            subprocess.Popen(['code', playbooks_dir])
-            return jsonify({
-                'status': 'Success',
-                'message': 'Opened playbooks directory in VS Code'
-            })
+        import subprocess
+        import os
+        policy = request.get_json()
+        app.logger.info(f"Applying EPP policy: {policy}")
+        blocked = []
+        renamed = []
+        debug_info = {}
+        if 'browser_block' in policy:
+            browser_map = {
+                'chrome': {
+                    'exe': 'chrome.exe',
+                    'paths': [
+                        r'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+                    ]
+                },
+                'edge': {
+                    'exe': 'msedge.exe',
+                    'paths': [
+                        r'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+                        r'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'
+                    ]
+                },
+                'firefox': {
+                    'exe': 'firefox.exe',
+                    'paths': [
+                        r'C:\\Program Files\\Mozilla Firefox\\firefox.exe',
+                        r'C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe'
+                    ]
+                },
+                'opera': {
+                    'exe': 'opera.exe',
+                    'paths': [
+                        r'C:\\Program Files\\Opera\\launcher.exe',
+                        r'C:\\Program Files (x86)\\Opera\\launcher.exe'
+                    ]
+                }
+            }
+            for browser in policy['browser_block']:
+                binfo = browser_map.get(browser)
+                if binfo:
+                    exe = binfo['exe']
+                    # 1. Kill the process
+                    try:
+                        result = subprocess.run([
+                            'taskkill', '/F', '/IM', exe
+                        ], capture_output=True, text=True)
+                        debug_info[browser] = {
+                            'returncode': result.returncode,
+                            'stdout': result.stdout,
+                            'stderr': result.stderr
+                        }
+                        if result.returncode == 0:
+                            blocked.append(browser)
+                    except Exception as e:
+                        debug_info[browser] = {'error': str(e)}
+                    # 2. Rename the executable in common locations
+                    for path in binfo['paths']:
+                        try:
+                            if os.path.exists(path):
+                                os.rename(path, path + '.blocked')
+                                renamed.append(path)
+                                if 'renamed' not in debug_info[browser]:
+                                    debug_info[browser]['renamed'] = []
+                                debug_info[browser]['renamed'].append(f"Renamed {path} to {path}.blocked")
+                            else:
+                                if 'rename_error' not in debug_info[browser]:
+                                    debug_info[browser]['rename_error'] = []
+                                debug_info[browser]['rename_error'].append(f"{path}: File does not exist")
+                        except Exception as e:
+                            if 'rename_error' not in debug_info[browser]:
+                                debug_info[browser]['rename_error'] = []
+                            debug_info[browser]['rename_error'].append(f"{path}: {str(e)}")
+            app.logger.info(f"Blocked browsers: {blocked}")
+            app.logger.info(f"Renamed executables: {renamed}")
+            app.logger.info(f"Taskkill debug info: {debug_info}")
+        return jsonify({'status': 'success', 'message': f'Policy applied. Blocked browsers: {blocked}. Renamed: {renamed}', 'policy': policy, 'debug': debug_info})
     except Exception as e:
-        logger.error(f"Error opening playbooks directory: {str(e)}")
-        return jsonify({
-            'status': 'Error',
-            'error': str(e)
-        }), 500
+        app.logger.error(f"Error applying EPP policy: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
     try:
